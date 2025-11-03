@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Entry</title>
+</head>
+<body>
+    <h1>Edit Entry</h1>
+    {% if messages %}
+    <ul> {% for message in messages %}<li class="{{message.tags}}">{{ message }}</li>{% endfor %}</ul>
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit">Save changes</button>
+    </form>
+    <p><a href="{% url 'entries_home' %}">Back</a></p>
+</body>
+</html>

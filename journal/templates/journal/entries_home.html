@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Journal</title>
+</head>
+<body>
+    <h1>Your Journal - {{request.user.username}}</h1>
+    <!-- FLASH MESSAGES: put near the top so user sees them immediately -->
+
+    {% if messages %}
+    <ul>
+    {% for message in messages %}
+    <li class="{{message.tags}}">{{message}}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+
+    <!-- Simple search form: GET ?q=keyword -->
+    <form method="GET">
+        <input type="text" name="q" placeholder="Search..." value="{{q}}">
+        <button type="submit">Search</button>
+    </form>
+     <!-- List entries -->
+      <ul>
+        {% for entry in entries %}
+        <li>
+<strong>{{entry.title}}/</strong> - {{entry.created_at|date:"M d, Y"}}
+<p>{{entry.content|truncatechars:150}}</p>
+{% if entry.image %}
+ <!-- show thumbnail if image uploaded -->
+  <img src="{{entry.image.url}}" alt="image" style="max-width: 150px;">
+{% endif %}
+<p>
+    <a href="{% url 'entry_detail' entry.id %}">Read</a>
+    <a href="{% url 'entry_update' entry.id %}">Edit</a>
+    <a href="{% url 'entry_delete' entry.id %}">Delete</a>
+</p>
+      </li>
+      {% empty %}
+      <li>No entries yet - write your first below.</li>
+      {% endfor %}
+    </ul>
+    <hr>
+
+    <!-- Create form (POST with files) -->
+     <h2>New Entry</h2>
+     <form method="POST" enctype="multipart/form-data"> <!---Important: enctype="multipart/form-data" is required for file uploads.--->
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit">Save</button>
+     </form>
+
+     <p><a href="{% url 'admin:index' %}">Admin</a></p>
+    <p><a href="{% url 'logout' %}">Logout</a></p>
+</body>
+</html>

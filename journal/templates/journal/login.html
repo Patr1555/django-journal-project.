@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journal Login</title>
+</head>
+<body>
+    <h1>Login to your Journal</h1>
+    <!-- Flash messages block -->
+     {% if messages %}
+     <ul>
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{message.tags}}"{% endif %}>
+            {{message}}
+        </li>
+        {% endfor %}
+     </ul>
+     {% endif %}
+
+     <!-- Login form -->
+      <form method="POST">
+        {% csrf_token %}<!-- CSRF token for security -->
+        {{form.as_p}}<!-- Django renders the form fields as <p> tags -->
+        <button type="submit">Login</button>
+      </form>
+<!-- Link to sign-up page -->
+
+<p> Don't have an account? <a href="{% url 'signup' %}">Sign up here</a></p>
+</body>
+</html>
